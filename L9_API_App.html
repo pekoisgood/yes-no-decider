@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yes No Decide</title>
+    <style>
+        body {
+            font-family:'Times New Roman', Times, serif;
+        }
+        .d-flex {
+            display: flex;
+        }
+        .justify-center {
+            justify-content: center;
+        }
+        .align-center {
+            align-items: center;
+        }
+        .column {
+            flex-direction: column;
+        }
+        form input {
+            width: 500px;
+            margin: 0 auto;
+            border: 1px solid gray;
+            padding: 5px 10px;
+            border-radius: 10px;
+        }
+        form input:focus {
+            outline: none;
+            border: 1px gray solid;
+        }
+        .hidden {
+            display: none;
+        }
+
+        #img-container {
+            margin-top: 10px;
+            justify-content: center;
+        }
+
+        #answer-text {
+            text-transform: uppercase;
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <form action="" class="d-flex justify-center column">
+        <h1 class="d-flex justify-center">Can't decide bro? Let us help ya!</h1>
+        <input class="d-flex justify-center" type="text" placeholder="Ask me a question?">
+
+    </form>
+
+    <section class="d-flex align-center column">
+        <article id="thinking" class="hidden">
+            <h1>Let me think...</h1>
+        </article>
+        <h1 id="answer-text"></h1>
+        <article id="img-container"></article>
+    </section>
+
+    <script>
+        const imgContainer = document.getElementById("img-container");
+        const answer = document.getElementById("answer-text");
+        const wtfUrl = 'https://yesno.wtf/api';
+        const thinking = document.getElementById("thinking");
+
+        //when user type in a question in the input and hit enter
+        function decide(e) {
+            e.preventDefault();
+            answer.innerHTML = "";
+            imgContainer.innerHTML = ""
+
+            showThinking()            
+
+            fetch(wtfUrl,).then(async (response) => {
+                const result = await response.json();
+                hideThinking();
+                
+                //display the result in 'img-container' and 'answer-text'
+                
+                // add new img tag in it
+                const img = document.createElement('img');
+                img.setAttribute('src', result.image);
+                
+                imgContainer.appendChild(img);
+                answer.textContent = result.answer;
+            })
+
+            function showThinking (){
+                thinking.classList.remove('hidden');
+            }
+
+            function hideThinking(){
+                thinking.classList.add('hidden');
+            }
+        }
+
+        document.querySelector("form").addEventListener('submit', decide);
+    </script>
+</body>
+</html>
